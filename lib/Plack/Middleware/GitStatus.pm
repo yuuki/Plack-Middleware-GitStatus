@@ -87,8 +87,11 @@ Plack::Middleware::GitStatus - Provide Git status via HTTP
     use Plack::Builder;
 
     builder {
-        enable "Plack::Middleware::GitStatus",
-            path  => '/git-status',
+
+        enable "Plack::Middleware::GitStatus", (
+            path  => '/git-status', git_dir => '/path/to/repository'
+        ) if $PLACK_ENV eq 'staging';
+
         $app;
     };
 
@@ -96,20 +99,42 @@ Plack::Middleware::GitStatus - Provide Git status via HTTP
     CurrentBranch: feature/something-interesting
     Commit: a7c24106ac453c10f1a460f52e95767803076dde
     Author: y_uuki
-    Date: Tue Feb 12 06:06:41 2013 +0900
+    Date: Tue Feb 12 06:06:41 2013
+    Message: Hello World
 
 =head1 DESCRIPTION
 
-Plack::Middleware::GitStatus provides via HTTP Git status like current branch, last commit, and so on.
+Plack::Middleware::GitStatus provides Git status such as current branch and last commit via HTTP.
+On a remote server such as staging environment, it is sometimes troublesome to check a current branch and last commit information of a working web application.
+Plack::Middleware::GitStatus add URI location displaying the information to your Plack application.
+
+=head1 CONFIGURATIONS
+
+=over 4
+
+=item path
+
+    path => '/server-status',
+
+location that displays git status
+
+=item git_dir
+
+    git_dir => '/path/to/repository'
+
+git direcotry path like '/path/to/deploy_dir/current'
+
+=back
 
 =head1 AUTHOR
 
-Yuuki Tsubouchi E<lt>yuuki@cpan.orgE<gt>
+Yuuki Tsubouchi E<lt>yuuki {at} cpan.orgE<gt>
 
 =head1 SEE ALSO
 
-L<Plack::Middleware::ServerStatus>
 L<Plack::Middleware::ServerStatus::Lite>
+
+L<Plack::Middleware::GitBlame|https://github.com/shumphrey/Plack-Middleware-GitBlame>
 
 =head1 LICENSE
 
