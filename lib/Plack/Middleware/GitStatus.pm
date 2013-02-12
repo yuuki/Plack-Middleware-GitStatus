@@ -7,7 +7,7 @@ use parent 'Plack::Middleware';
 use Plack::Util::Accessor qw(path);
 use Plack::Util;
 
-use Cwd ();
+use Cwd;
 use Git::Repository;
 use Try::Tiny;
 
@@ -15,7 +15,7 @@ our $WORKTREE;
 
 sub prepare_app {
     my $self = shift;
-    $WORKTREE = Git::Repository->new(work_tree => Cwd::getcwd);
+    $WORKTREE = Git::Repository->new(work_tree => getcwd);
 }
 
 sub call {
@@ -23,16 +23,15 @@ sub call {
 
     if ($self->path && $env->{PATH_INFO} eq $self->path) {
         my $brach_name = $self->_current_branch;
-        my $body = "CURRENT_BRANCH: $brach_name";
+        my $body = "CurrentBranch: $brach_name";
         return [200, ['Content-Type' => 'text/plain'], [ $body ]];
     }
 
     return $self->app->($env);
 }
 
-sub _curret_branch {
+sub _current_branch {
     my $self = shift;
-
     my (@lines) = $WORKTREE->run('status');
     $lines[0] =~ /branch (.+)$/;
     return $1;
@@ -51,7 +50,7 @@ Plack::Middleware::GitStatus - Provide Git status via HTTP
 
     builder {
         enable "Plack::Middleware::GitStatus",
-            path => '/git-status',
+            path  => '/git-status',
         $app;
     };
 
