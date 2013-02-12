@@ -4,7 +4,7 @@ use warnings;
 our $VERSION = '0.01';
 
 use parent 'Plack::Middleware';
-use Plack::Util::Accessor qw(path);
+use Plack::Util::Accessor qw(path git_dir);
 use Plack::Util;
 
 use Cwd;
@@ -15,7 +15,7 @@ our $WORKTREE;
 
 sub prepare_app {
     my $self = shift;
-    $WORKTREE = Git::Repository->new(work_tree => getcwd);
+    $WORKTREE = Git::Repository->new(work_tree => $self->{git_dir} || getcwd);
 }
 
 sub call {
