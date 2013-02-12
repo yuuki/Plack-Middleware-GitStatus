@@ -16,21 +16,34 @@ our $WORKTREE;
 
 sub prepare_app {
     my $self = shift;
-    $WORKTREE = Git::Repository->new(work_tree => $self->{git_dir} || getcwd);
+    try {
+        $WORKTREE = Git::Repository->new(work_tree => $self->{git_dir} || getcwd);
+    } catch {
+        $self->{error} = $_;
+    };
 }
 
 sub call {
     my ($self, $env) = @_;
 
     if ($self->path && $env->{PATH_INFO} eq $self->path) {
-        my $brach_name = $self->_current_branch;
-        my $last_commit = $self->_last_commit;
+        if ($self->{error}) {
+            return [500, ['Content-Type' => 'text/plain'], [ $self->{error} ]];
+        }
+        my ($brach_name, $last_commit);
+        try {
+            $brach_name  = $self->_current_branch;
+            $last_commit = $self->_last_commit;
+        } catch {
+            return [500, ['Content-Type' => 'text/plain'], [ $_ ]];
+        };
 
         my $body  = "CurrentBranch: $brach_name\n";
            $body .= sprintf "Commit: %s\n",  $last_commit->{commit};
            $body .= sprintf "Author: %s\n",  $last_commit->{author};
            $body .= sprintf "Date: %s\n",    $last_commit->{date};
-           $body .= sprintf "Message: %s", $last_commit->{message};
+           $body .= sprintf "Message: %s",   $last_commit->{message};
+
         return [200, ['Content-Type' => 'text/plain'], [ $body ]];
     }
 
