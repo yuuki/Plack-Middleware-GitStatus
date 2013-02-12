@@ -71,7 +71,7 @@ sub _last_commit {
 
 sub _unixtime_to_date {
     my $lt = localtime($_[0]);
-    my $t = gmtime($lt->epoch);
+    my $t  = gmtime($lt->epoch);
     return $t;
 }
 

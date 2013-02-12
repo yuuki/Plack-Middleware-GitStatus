@@ -7,6 +7,12 @@ use Plack::Test;
 use Plack::Builder;
 use Plack::Middleware::GitStatus;
 
+use File::Which qw(which);
+
+if (not -x which('git') && not -x "/usr/bin/git" && not -x "/usr/local/bin/git") {
+    plan skip_all => "git command is necessorry for testing";
+}
+
 subtest "not git repository" => sub {
     my $app = builder {
         enable 'GitStatus', path => '/git-status', git_dir => "/tmp";

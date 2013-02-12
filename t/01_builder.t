@@ -8,8 +8,12 @@ use Plack::Builder;
 use Plack::Middleware::GitStatus;
 
 use File::Temp ();
+use File::Which qw(which);
 use Git::Repository;
 
+if (not -x which('git') && not -x "/usr/bin/git" && not -x "/usr/local/bin/git") {
+    plan skip_all => "git command is necessorry for testing";
+}
 
 # setup
 my $dir = File::Temp::tempdir(CLEANUP => 1);
