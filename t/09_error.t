@@ -7,23 +7,15 @@ use Plack::Test;
 use Plack::Builder;
 use Plack::Middleware::GitStatus;
 
-use File::Temp ();
 use File::Which qw(which);
-use Git::Repository;
 
 if (not -x which('git') && not -x "/usr/bin/git" && not -x "/usr/local/bin/git") {
     plan skip_all => "git command is necessorry for testing";
 }
 
-# setup
-my $dir = File::Temp::tempdir(CLEANUP => 1);
-Git::Repository->run(init => $dir);
-my $r = Git::Repository->new(work_tree => $dir);
-$r->run('commit', '--allow-empty', '-m', "Hello");
-
-subtest builder => sub {
+subtest "not git repository" => sub {
     my $app = builder {
-        enable 'GitStatus', path => '/git-status', git_dir => $dir;
+        enable 'GitStatus', path => '/git-status', git_dir => "/tmp";
         sub { [200, [ 'Content-Type' => 'text/plain' ], [ "Hello World" ]] };
     };
 
@@ -31,11 +23,8 @@ subtest builder => sub {
         my $cb = shift;
         my $req = HTTP::Request->new(GET => "http://localhost/git-status");
         my $res = $cb->($req);
-        like $res->content, qr/CurrentBranch:/;
-        like $res->content, qr/Commit: [a-z0-9]+/;
-        like $res->content, qr/Author:/;
-        like $res->content, qr/Date:/;
-        like $res->content, qr/Message:/;
+        is $res->code, 500;
+        like $res->content, qr/^fatal: Not a git repository/;
     };
 };
 
