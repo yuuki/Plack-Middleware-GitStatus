@@ -8,7 +8,8 @@ use Plack::Util::Accessor qw(path git_dir);
 use Plack::Util;
 
 use Cwd;
-use Git::Repository;
+use Git::Repository 'Log';
+use Time::Piece;
 use Try::Tiny;
 
 our $WORKTREE;
@@ -23,7 +24,13 @@ sub call {
 
     if ($self->path && $env->{PATH_INFO} eq $self->path) {
         my $brach_name = $self->_current_branch;
-        my $body = "CurrentBranch: $brach_name";
+        my $last_commit = $self->_last_commit;
+
+        my $body  = "CurrentBranch: $brach_name\n";
+           $body .= sprintf "Commit: %s\n",  $last_commit->{commit};
+           $body .= sprintf "Author: %s\n",  $last_commit->{author};
+           $body .= sprintf "Date: %s\n",    $last_commit->{date};
+           $body .= sprintf "Message: %s", $last_commit->{message};
         return [200, ['Content-Type' => 'text/plain'], [ $body ]];
     }
 
@@ -35,6 +42,24 @@ sub _current_branch {
     my (@lines) = $WORKTREE->run('status');
     $lines[0] =~ /branch (.+)$/;
     return $1;
+}
+
+sub _last_commit {
+    my $self = shift;
+
+    my ($log) = Git::Repository->log('-1');
+    return +{
+        commit  => $log->commit,
+        author  => $log->author,
+        message => $log->message,
+        date    => _unixtime_to_date($log->author_localtime),
+    };
+}
+
+sub _unixtime_to_date {
+    my $lt = localtime($_[0]);
+    my $t = gmtime($lt->epoch);
+    return $t;
 }
 
 1;

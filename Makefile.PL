@@ -5,6 +5,7 @@ all_from 'lib/Plack/Middleware/GitStatus.pm';
 requires 'Git::Repository';
 requires 'parent';
 requires 'Plack';
+requires 'Time::Piece'; # standard module 5.10 and over
 requires 'Try::Tiny';
 
 tests 't/*.t';
