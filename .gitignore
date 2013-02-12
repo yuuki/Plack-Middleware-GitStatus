@@ -11,3 +11,4 @@ MANIFEST.bak
 MYMETA.*
 *.sw[po]
 local/
+.shipit
