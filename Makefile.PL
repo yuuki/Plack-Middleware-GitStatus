@@ -2,7 +2,10 @@ use inc::Module::Install;
 name 'Plack-Middleware-GitStatus';
 all_from 'lib/Plack/Middleware/GitStatus.pm';
 
-# requires '';
+requires 'Git::Repository';
+requires 'parent';
+requires 'Plack';
+requires 'Try::Tiny';
 
 tests 't/*.t';
 author_tests 'xt';
