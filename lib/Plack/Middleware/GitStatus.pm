@@ -90,7 +90,7 @@ Plack::Middleware::GitStatus - Provide Git status via HTTP
 
         enable "Plack::Middleware::GitStatus", (
             path  => '/git-status', git_dir => '/path/to/repository'
-        ) if $PLACK_ENV eq 'staging';
+        ) if $ENV{PLACK_ENV} eq 'staging';
 
         $app;
     };
@@ -114,7 +114,7 @@ Plack::Middleware::GitStatus add URI location displaying the information to your
 
 =item path
 
-    path => '/server-status',
+    path => '/git-status',
 
 location that displays git status
 
