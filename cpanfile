@@ -1,5 +1,5 @@
-requires 'Cache::FileCache';
-requires 'Git::Repository';
+requires 'Cache::Cache', 1.06;
+requires 'Git::Repository', 1.301;
 requires 'Plack';
 requires 'Time::Piece';
 requires 'Try::Tiny';

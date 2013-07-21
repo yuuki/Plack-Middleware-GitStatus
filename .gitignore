@@ -19,3 +19,4 @@ local/
 !Build/
 !META.json
 !LICENSE
+.carton
