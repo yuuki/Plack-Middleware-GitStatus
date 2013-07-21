@@ -1,3 +1,4 @@
+requires 'Cache::FileCache';
 requires 'Git::Repository';
 requires 'Plack';
 requires 'Time::Piece';

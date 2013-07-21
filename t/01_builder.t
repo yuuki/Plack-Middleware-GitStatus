@@ -16,6 +16,7 @@ if (not -x which('git') && not -x "/usr/bin/git" && not -x "/usr/local/bin/git")
 }
 
 # setup
+$Plack::Middleware::GitStatus::CACHE->clear;
 my $dir = File::Temp::tempdir(CLEANUP => 1);
 Git::Repository->run(init => $dir);
 my $r = Git::Repository->new(work_tree => $dir);

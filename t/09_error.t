@@ -13,6 +13,8 @@ if (not -x which('git') && not -x "/usr/bin/git" && not -x "/usr/local/bin/git")
     plan skip_all => "git command is necessorry for testing";
 }
 
+$Plack::Middleware::GitStatus::CACHE->clear;
+
 subtest "not git repository" => sub {
     my $app = builder {
         enable 'GitStatus', path => '/git-status', git_dir => "/tmp";
