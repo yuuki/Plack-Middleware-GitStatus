@@ -12,3 +12,10 @@ MYMETA.*
 *.sw[po]
 local/
 .shipit
+/Plack-Middleware-GitStatus-*
+/.build
+/_build_params
+/Build
+!Build/
+!META.json
+!LICENSE

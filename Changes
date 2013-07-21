@@ -1,4 +1,6 @@
 Revision history for Perl extension Plack::Middleware::GitStatus
 
+{{$NEXT}}
+
 0.01    Wed Feb 13 05:18:49 2013
         - original version
