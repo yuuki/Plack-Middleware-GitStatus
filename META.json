@@ -50,6 +50,7 @@
       },
       "runtime" : {
          "requires" : {
+            "Cache::FileCache" : "0",
             "Git::Repository" : "0",
             "Plack" : "0",
             "Time::Piece" : "0",
@@ -70,7 +71,7 @@
          "web" : "https://github.com/y-uuki/Plack-Middleware-GitStatus"
       }
    },
-   "version" : "0.01",
+   "version" : "0.02",
    "x_contributors" : [
       "y_uuki <yuki.tsubo@gmail.com>"
    ]
