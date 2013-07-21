@@ -14,8 +14,7 @@ use Time::Piece;
 use Try::Tiny;
 
 our $CACHE = Cache::FileCache->new({
-    namespace          => 'Plack::Middleware::GitStatus',
-    default_expires_in => 24 * 60 * 60,  # 1 day
+    namespace => 'Plack::Middleware::GitStatus',
 });
 our $CACHE_KEY = 'git-status';
 
