@@ -9,7 +9,7 @@ use Plack::Middleware::GitStatus;
 
 use File::Which qw(which);
 
-if (not -x which('git') && not -x "/usr/bin/git" && not -x "/usr/local/bin/git") {
+if (! -x which('git') && ! -x "/usr/bin/git" && ! -x "/usr/local/bin/git") {
     plan skip_all => "git command is necessorry for testing";
 }
 
