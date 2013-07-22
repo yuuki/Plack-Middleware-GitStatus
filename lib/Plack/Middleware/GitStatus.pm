@@ -85,7 +85,7 @@ sub _current_branch {
 sub _last_commit {
     my $self = shift;
 
-    my ($log) = Git::Repository->log('-1');
+    my ($log) = $WORKTREE->log('-1');
     return +{
         commit  => $log->commit,
         author  => $log->author,
